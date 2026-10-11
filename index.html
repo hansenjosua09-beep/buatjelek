@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>For You ♥</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  --bg:#fff1f3; --card:#fff; --text:#4a2230; --muted:#8a5a6a; --accent:#e0475f; --accent2:#f7a3b3; --cake1:#f7a3b3; --cake2:#fbd0d9; --cake3:#fff;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#2a1219;--card:#3a1b25;--text:#ffe8ed;--muted:#d9a3b2;--accent:#ff6b83;--accent2:#7a3345;--cake1:#c9506a;--cake2:#e58aa0;--cake3:#ffe8ed;}
+}
+:root[data-theme="dark"]{--bg:#2a1219;--card:#3a1b25;--text:#ffe8ed;--muted:#d9a3b2;--accent:#ff6b83;--accent2:#7a3345;--cake1:#c9506a;--cake2:#e58aa0;--cake3:#ffe8ed;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Playfair Display',Georgia,serif;line-height:1.6;overflow-x:hidden}
+h1,h2{font-family:'Dancing Script',cursive,Georgia,serif;color:var(--accent);margin:0}
+
+/* Hearts */
+.hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.hearts span{position:absolute;bottom:-40px;color:var(--accent2);font-size:24px;opacity:.7;animation:rise 12s linear infinite}
+.hearts span:nth-child(1){left:8%}
+.hearts span:nth-child(2){left:30%;animation-delay:3s;font-size:18px}
+.hearts span:nth-child(3){left:50%;animation-delay:6s;font-size:30px}
+.hearts span:nth-child(4){left:70%;animation-delay:2s;font-size:20px}
+.hearts span:nth-child(5){left:90%;animation-delay:8s;font-size:26px}
+@keyframes rise{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+
+/* Pages: shown with :target, page 1 is the default */
+.page{display:none;position:relative;z-index:1;min-height:100vh;padding:48px 20px;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:fade .8s ease}
+.page:target{display:flex}
+body:not(:has(.page:target)) #p1{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(16px)}}
+
+.btn{display:inline-block;border:0;cursor:pointer;font:inherit;font-size:1.1rem;padding:14px 34px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;box-shadow:0 8px 20px rgba(224,71,95,.35);transition:transform .2s}
+.btn:hover{transform:scale(1.07)}
+.btn.ghost{background:transparent;color:var(--muted);box-shadow:none;border:2px solid var(--accent2)}
+.row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:28px}
+.big{font-size:clamp(3rem,13vw,5.5rem);line-height:1.1}
+.sub{color:var(--muted);max-width:32ch}
+
+/* Page 2: title + cake */
+.bd{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:clamp(2.4rem,11vw,5rem);line-height:1.05;color:var(--accent);letter-spacing:.04em;margin-bottom:.4em;animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.04)}}
+#blow{position:absolute;opacity:0;pointer-events:none}
+.cake{font-size:clamp(11px,3.4vw,18px);width:22em;height:20em;position:relative;margin:30px 0 20px}
+.plate{position:absolute;bottom:0;left:0;width:22em;height:1.2em;border-radius:50%;background:var(--accent2);opacity:.8}
+.tier{position:absolute;left:50%;transform:translateX(-50%);border-radius:1em 1em .4em .4em;background:linear-gradient(var(--cake3) 0 28%,var(--cake1) 28%);box-shadow:inset 0 -.5em 0 rgba(0,0,0,.08)}
+.t1{bottom:.6em;width:20em;height:6.5em}
+.t2{bottom:7.1em;width:14.5em;height:5.5em;background:linear-gradient(var(--cake3) 0 30%,var(--cake2) 30%)}
+.t3{bottom:12.6em;width:9em;height:4.5em}
+.candle{position:absolute;left:50%;bottom:17.1em;transform:translateX(-50%);width:1em;height:4em;border-radius:.3em;background:repeating-linear-gradient(135deg,#fff 0 .5em,var(--accent) .5em 1em)}
+.candle::before{content:"";position:absolute;top:-.5em;left:50%;width:.12em;height:.6em;background:#333;transform:translateX(-50%)}
+.flame{position:absolute;left:50%;bottom:21em;width:1.4em;height:2.4em;transform:translateX(-50%);border-radius:50% 50% 50% 50%/65% 65% 35% 35%;background:radial-gradient(circle at 50% 75%,#fff6b0 0 25%,#ffc233 45%,#ff7a1a 80%);box-shadow:0 0 1.4em .6em rgba(255,170,40,.55);transform-origin:50% 100%;animation:flicker .45s ease-in-out infinite alternate;transition:opacity .5s,transform .5s}
+@keyframes flicker{from{transform:translateX(-50%) scale(1,1) rotate(-2deg)}to{transform:translateX(-50%) scale(.9,1.08) rotate(2deg)}}
+.smoke{position:absolute;left:50%;bottom:21em;width:.8em;height:3em;transform:translateX(-50%);border-radius:50%;background:linear-gradient(rgba(150,150,150,.6),transparent);opacity:0}
+#blow:checked ~ .cake .flame{opacity:0;animation:none;transform:translateX(-50%) scale(0)}
+#blow:checked ~ .cake .smoke{animation:smoke 2.5s ease-out forwards}
+@keyframes smoke{0%{opacity:.8;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-30%,-3em) scale(2)}}
+.after{display:none}
+#blow:checked ~ .before{display:none}
+#blow:checked ~ .after{display:block;animation:fade 1s ease}
+#blow:checked ~ .bd{animation:none}
+
+/* Page 3: gallery */
+.gallery{width:100%;max-width:900px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:28px 0}
+.slot{background:var(--card);border-radius:16px;padding:10px;box-shadow:0 6px 18px rgba(0,0,0,.1);transition:transform .3s}
+.slot:nth-child(odd){transform:rotate(-1.2deg)}
+.slot:nth-child(even){transform:rotate(1.2deg)}
+.slot:hover{transform:rotate(0) scale(1.03)}
+.slot img,.slot video,.ph{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:10px;display:block}
+.ph{display:flex;align-items:center;justify-content:center;border:2px dashed var(--accent2);color:var(--muted);font-size:.95rem;padding:12px}
+.cap{margin:8px 0 2px;color:var(--muted);font-size:.9rem}
+/* Next-page button row */
+.next{margin:8px 0 0}
+
+/* Final page: speech bubble + video */
+.bubble{position:relative;max-width:520px;width:100%;background:var(--card);color:var(--text);border-radius:28px;padding:28px 26px;box-shadow:0 10px 28px rgba(0,0,0,.14);font-size:1.1rem;text-align:left;margin:24px 0 34px}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);border:18px solid transparent;border-bottom:0;border-top-color:var(--card)}
+.bubble p{margin:0 0 .8em}
+.bubble p:last-child{margin:0}
+.final-video{width:100%;max-width:420px}
+</style>
+</head>
+<body>
+<div class="hearts" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span><span>♥</span><span>♥</span></div>
+
+<!-- ===== PAGE 1: Continue or No ===== -->
+<section class="page" id="p1">
+  <h1 class="big">ALLOWW JELEEKK ♥</h1>
+  <p class="sub">Ada Surprise nihh mwehehehe. Yakin mauu lanjutt?</p>
+  <div class="row">
+    <a class="btn" href="#p2">Yakin deh</a>
+    <a class="btn ghost" href="#sure">Maless</a>
+  </div>
+</section>
+
+<!-- "No" answer -->
+<section class="page" id="sure">
+  <h1 class="big">Betulann? 🥺</h1>
+  <p class="sub">Please? Udaa Bikinn Darii Lamaa Lohh.</p>
+  <div class="row">
+    <a class="btn" href="#p2" style="font-size:1.5rem;padding:18px 48px">Okay, Lanjutt</a>
+  </div>
+</section>
+
+<!-- ===== PAGE 2: Birthday cake ===== -->
+<section class="page" id="p2">
+  <input type="checkbox" id="blow">
+  <div class="bd">HAPPY BIRTHDAY<br>BOCILLLL</div>
+
+  <div class="cake" aria-label="Birthday cake with a lit candle">
+    <div class="plate"></div>
+    <div class="tier t1"></div>
+    <div class="tier t2"></div>
+    <div class="tier t3"></div>
+    <div class="candle"></div>
+    <div class="flame"></div>
+    <div class="smoke"></div>
+  </div>
+
+  <label class="btn before" for="blow">Tiup Lilinnya Jelekk!🌬️</label>
+  <div class="after">
+    <p class="sub" style="margin:0 auto 18px">Make a wish... 🤍</p>
+    <a class="btn" href="#p3">Liatt Potoo2 Yukk →</a>
+  </div>
+</section>
+
+<!-- ===== PAGE 3: Photos & videos ===== -->
+<section class="page" id="p3">
+  <h2 class="big" style="font-size:clamp(2.6rem,10vw,4.2rem)">Mwehehehe</h2>
+  <p class="sub">Cantee sokalii jelekkk.</p>
+
+  <div class="gallery">
+    <!-- PHOTO: replace the <div class="ph"> line with <img src="photo1.jpg" alt="..."> -->
+    <div class="slot"><img src="image/jelek10.jpeg" alt="Photo 1"><p class="cap">GAWD DAYUM</p></div>
+    <div class="slot"><img src="image/jelek9.jpeg" alt="Photo 2"><p class="cap">LAMPU KAKA!</p></div>
+
+    <!-- VIDEO: replace the <div class="ph"> line with <video src="video1.mp4" controls playsinline></video> -->
+    <div class="slot"><video src="vidio/pidio7.mp4" controls playsinline></video><p class="cap">LAGI GAK SEH</p></div>
+
+    <div class="slot"><img src="image/jelek2.jpeg" alt="Photo 1"><p class="cap">OMAGAA</p></div>
+    <div class="slot"><img src="image/jelek1.jpeg" alt="Photo 2"><p class="cap">SUNTIK AKUHH</p></div>
+    <div class="slot"><video src="vidio/pidio4.mp4" controls playsinline></video><p class="cap">KAKA PERAWAATT</p></div>
+    <!-- Copy any <div class="slot">...</div> block to add more -->
+  </div>
+
+  <a class="btn next" href="#p4">Lanjuutt? →</a>
+</section>
+
+<!-- ===== PAGE 4: More photos & videos ===== -->
+<section class="page" id="p4">
+  <h2 class="big" style="font-size:clamp(2.6rem,10vw,4.2rem)">MASIHH ADAAA</h2>
+  <p class="sub">MWEHEHEHEHE</p>
+
+  <div class="gallery">
+    <div class="slot"><img src="image/jelek3.jpeg" alt="Photo 5"><p class="cap">EMANG BOLEE?</p></div>
+    <div class="slot"><video src="vidio/pidio1.mp4" controls playsinline></video><p class="cap">AHAHAHA</p></div>  
+    <div class="slot"><img src="image/jelek4.jpeg" alt="Photo 7"><p class="cap">ADA ORANG LUCU!</p></div>
+    <div class="slot"><video src="vidio/pidio2.mp4" controls playsinline></video><p class="cap">SALTOO SALTOO</p></div>
+    <div class="slot"><img src="image/jelek6.jpeg" alt="Photo 7"><p class="cap">OHIOO!?</p></div>
+    <div class="slot"><video src="vidio/pidio5.mp4" controls playsinline></video><p class="cap">"HIDUP TERLALU SINGKAT"</p></div>
+  </div>
+
+  <a class="btn next" href="#p5">LANJUT! LANJUTT!! →</a>
+</section>
+
+<!-- ===== PAGE 5: Even more photos & videos ===== -->
+<section class="page" id="p5">
+  <h2 class="big" style="font-size:clamp(2.6rem,10vw,4.2rem)">ADAA LAGII!</h2>
+  <p class="sub">WITH CIOOOO!</p>
+
+  <div class="gallery">
+    <div class="slot"><img src="image/jelek5.jpeg" alt="Photo 8"><p class="cap">Write a caption here</p></div>
+    <div class="slot"><img src="image/jelek12.jpeg" alt="Photo 9"><p class="cap">Write a caption here</p></div>
+    <div class="slot"><video src="vidio/pidio3.mp4" controls playsinline></video><p class="cap">Write a caption here</p></div>
+    <div class="slot"><img src="image/jelek8.jpeg" alt="Photo 10"><p class="cap">Write a caption here</p></div>
+    <div class="slot"><img src="image/jelek7.jpeg" alt="Photo 10"><p class="cap">Write a caption here</p></div>
+    <div class="slot"><video src="vidio/pidio6.mp4" controls playsinline></video><p class="cap">Write a caption here</p></div>
+  </div>
+
+  <a class="btn next" href="#p6">CUKUP GAK SIEH? →</a>
+</section>
+
+<!-- ===== PAGE 6: Ask to continue to the last page ===== -->
+<section class="page" id="p6">
+  <h1 class="big">Terakhir dehhh... 💌</h1>
+  <p class="sub">Ada lagii sihh ini terakhirr, tapii orangg lucuu malooo. Gass lanjuuutt?</p>
+  <div class="row">
+    <a class="btn" href="#p7">Lanjut lahhh!</a>
+    <a class="btn ghost" href="#p5">Jangann ahh, Takoo</a>
+  </div>
+</section>
+
+<!-- ===== PAGE 7: Final page ===== -->
+<section class="page" id="p7">
+  <h2 class="big" style="font-size:clamp(2.6rem,10vw,4.2rem)">Buatt Bocill Busuu ♥</h2>
+
+  <!-- Edit the text inside the bubble: add or remove <p> lines -->
+  <div class="bubble">
+    <p>JELEKK! baca pelann pelann yahh</p>
+    <p>Hallo jelekk hehehe, jujur tida tauu mau ketik apa... tapi orang lucu mau bilang terima kasih soh ba temann dengan orang lucu.
+      orang lucu senang skali boleh kenal jelek, boleh seru seruan dengan jelek, boleh berbagi keseharian dengan jelek, mungkin jelek
+      belum anggap "berarti" orang lucu pe kehadiran karena jelek pe hati belum sempat kosong melompong, kesepian, tida ada teman cerita, 
+      tapi jelek pe kehadiran pa orang lucu itu cukup berarti karena orang lucu udaa ada temann yang mau dengar orang lucu cerita, 
+      mau dengar orang lucu mengeluh, mau dengar orang lucu ganu hahahaha.</p>
+
+      <p>Tetap jadi orang lucu pe "orang jelekk" nehh, tapi jadii juga jelek pe diri sendiri, karena orang lucu tidaa mau orang jelekk berubah
+      cuma karena orang lucu pe tingkahh. jadilahh jelekk pe dirii sendirii yangg IMUTT, LUCUU, CANTIKK, deng NGANGENINNN SEKALII</p>
+
+      <p>Panjangg Umur jelekk, Citaa Citaa dengann Harapan Semogaa tercapaii, yangg paling pentingg Jagaa kesehatann supayaa bocill busuu tidaa
+      sakitt sakitt keciannn. kayakknya cuma itu duluu dehh, udahh emosionall nihh sambill ngetikk ahahahaha blunderr lagii  blunderr lagii.
+    </p>
+    <p>Happy Birthday Jelekkk. Mungkinn Akuu Tidaa Segantengg yangg Lainn, Yangg Pentingg Bisaa Bikinn Jelekk Happyy Teross ♥</p>
+  </div>
+
+  <!-- RANDOM VIDEO: replace the <div class="ph"> line with <video src="surprise.mp4" controls playsinline></video> -->
+  <div class="slot"><img src="image/jelek11.jpeg" alt="Photo 10"></div>
+</section>
+
+</body>
+</html>
